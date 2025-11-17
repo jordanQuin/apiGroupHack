@@ -19,11 +19,8 @@ const db = require('../../../proxy/db');
  *       404:
  *         description: Voiture non trouvée
  */
-// FAILLE INTENTIONNELLE: IDOR - pas de vérification de propriétaire
-// N'importe qui peut accéder aux détails de n'importe quelle voiture
 module.exports = async (req, res) => {
     try {
-        // Validation basique mais pas de vérification de propriétaire
         const id = parseInt(req.params.id);
         if (isNaN(id)) {
             return res.status(400).json({ message: "ID invalide" });
@@ -34,10 +31,13 @@ module.exports = async (req, res) => {
         if (!car) {
             return res.status(404).json({ message: "Voiture non trouvée" });
         }
-
-        // PROBLÈME: retourne la voiture même si elle n'appartient pas à l'utilisateur connecté
-        // Devrait vérifier: car.ownerId === req.userId || req.userRole === 'admin'
         
+        if (car.ownerId !== req.userId && req.userRole !== 'admin') {
+            return res.status(403).json({ 
+                message: "Accès interdit. Vous n'êtes pas propriétaire de cette voiture." 
+            });
+        }
+
         res.json(car);
     } catch (error) {
         console.error('Get car error:', error);

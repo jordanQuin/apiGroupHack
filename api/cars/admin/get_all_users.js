@@ -16,7 +16,6 @@ module.exports = async (req, res) => {
     try {
         const users = await db.getAllUsers();
         
-        // Retourner les utilisateurs sans les mots de passe
         const safeUsers = users.map(user => {
             const { password, ...safeUser } = user;
             return safeUser;

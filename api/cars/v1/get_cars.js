@@ -51,7 +51,6 @@ const querySchema = Joi.object({
  */
 module.exports = async (req, res) => {
     try {
-        // Validation sécurisée des paramètres de requête
         const { error, value } = querySchema.validate(req.query);
         if (error) {
             return res.status(400).json({ message: error.details[0].message });
@@ -60,10 +59,8 @@ module.exports = async (req, res) => {
         const { page, limit, brand, minPrice, maxPrice } = value;
         const offset = (page - 1) * limit;
 
-        // Récupération sécurisée des données
         let allCars = await db.getAllCars();
 
-        // Application des filtres de manière sécurisée
         if (brand) {
             allCars = allCars.filter(car => 
                 car.brand.toLowerCase().includes(brand.toLowerCase())
@@ -79,10 +76,8 @@ module.exports = async (req, res) => {
         const totalItems = allCars.length;
         const totalPages = Math.ceil(totalItems / limit);
 
-        // Pagination sécurisée
         const paginatedCars = allCars.slice(offset, offset + limit);
 
-        // Construction sécurisée des URLs HATEOAS
         const baseUrl = `${req.protocol}://${req.get('host')}/api/v1/cars`;
 
         const carsWithLinks = paginatedCars.map(car => ({
@@ -106,7 +101,6 @@ module.exports = async (req, res) => {
         const nextPage = page < totalPages ? `${baseUrl}?${buildQueryString(page + 1)}` : null;
         const prevPage = page > 1 ? `${baseUrl}?${buildQueryString(page - 1)}` : null;
 
-        // Définir les en-têtes de cache sécurisées
         res.set('Cache-Control', 'public, max-age=300');
 
         res.json({

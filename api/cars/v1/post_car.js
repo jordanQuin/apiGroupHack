@@ -1,7 +1,6 @@
 const db = require('../../../proxy/db');
 const Joi = require('joi');
 
-// Validation sécurisée des données de voiture
 const carSchema = Joi.object({
     brand: Joi.string().trim().min(1).max(50).required(),
     model: Joi.string().trim().min(1).max(50).required(),
@@ -47,7 +46,6 @@ const carSchema = Joi.object({
  */
 module.exports = async (req, res) => {
     try {
-        // Validation sécurisée des données d'entrée
         const { error, value } = carSchema.validate(req.body);
         if (error) {
             return res.status(400).json({ message: error.details[0].message });
@@ -55,16 +53,14 @@ module.exports = async (req, res) => {
 
         const { brand, model, year, price } = value;
 
-        // Créer la voiture avec l'ID du propriétaire
         const newCar = await db.createCar({
             brand,
             model,
             year,
             price,
-            ownerId: req.userId // Associer la voiture à l'utilisateur connecté
+            ownerId: req.userId
         });
 
-        // Définir les en-têtes de cache pour éviter la mise en cache
         res.set('Cache-Control', 'no-store');
 
         res.status(201).json(newCar);

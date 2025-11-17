@@ -20,7 +20,6 @@ module.exports = async (req, res) => {
             return res.status(404).json({ message: "Utilisateur non trouvé" });
         }
 
-        // Retourner le profil sans données sensibles
         const { password, ...userProfile } = user;
         
         res.set('Cache-Control', 'private, no-cache');

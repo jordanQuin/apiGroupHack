@@ -1,6 +1,5 @@
 const jwt = require("jsonwebtoken");
 
-// Middleware d'authentification sécurisé
 module.exports = (req, res, next) => {    
   const jwtToken =
     req.cookies?.jwtToken ||

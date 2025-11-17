@@ -30,7 +30,6 @@ module.exports = async (req, res) => {
             return res.status(404).json({ message: "Voiture non trouvée" });
         }
 
-        // Vérification sécurisée de la propriété
         if (car.ownerId !== req.userId && req.userRole !== 'admin') {
             return res.status(403).json({ 
                 message: "Accès interdit. Vous n'êtes pas propriétaire de cette voiture." 

@@ -1,7 +1,6 @@
 const db = require('../../../proxy/db');
 const Joi = require('joi');
 
-// Validation des données de mise à jour (optionnelles)
 const updateCarSchema = Joi.object({
     brand: Joi.string().trim().min(1).max(50).optional(),
     model: Joi.string().trim().min(1).max(50).optional(),
@@ -49,22 +48,16 @@ module.exports = async (req, res) => {
             return res.status(400).json({ message: "ID invalide" });
         }
 
-        // Validation des données
         const { error, value } = updateCarSchema.validate(req.body);
         if (error) {
             return res.status(400).json({ message: error.details[0].message });
         }
 
-        // Vérifier que la voiture existe
         const existingCar = await db.getCarById(id);
         if (!existingCar) {
             return res.status(404).json({ message: "Voiture non trouvée" });
         }
 
-        // CETTE ROUTE UTILISE LE MIDDLEWARE check_ownership DÉFAILLANT
-        // qui ne vérifie pas réellement la propriété
-        
-        // Mettre à jour la voiture en conservant l'ownerId original
         const updatedData = {
             ...existingCar,
             ...value

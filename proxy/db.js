@@ -1,7 +1,6 @@
 const { cars, users } = require('../mockDB/data');
 
 module.exports = {
-    // Cars operations
     getAllCars: async () => {
         return cars;
     },
@@ -33,7 +32,6 @@ module.exports = {
         return deletedCar[0];
     },
 
-    // Users operations
     getAllUsers: async () => {
         return users;
     },

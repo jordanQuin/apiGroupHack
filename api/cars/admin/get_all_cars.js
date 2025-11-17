@@ -17,7 +17,6 @@ module.exports = async (req, res) => {
         const cars = await db.getAllCars();
         const users = await db.getAllUsers();
         
-        // Enrichir les données avec les informations du propriétaire
         const enrichedCars = cars.map(car => {
             const owner = users.find(user => user.id === car.ownerId);
             return {

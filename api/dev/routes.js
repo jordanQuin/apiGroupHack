@@ -33,7 +33,6 @@ module.exports = function(app) {
         }
     });
 
-    // Route pour la documentation Swagger
     app.use("/api/dev/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
         explorer: true,
         customCss: '.swagger-ui .topbar { display: none }',
