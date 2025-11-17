@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const { swaggerUi, swaggerSpec } = require("../../config/swagger");
 
 module.exports = function(app) {
     // Route de développement pour générer des tokens JWT
@@ -31,4 +32,11 @@ module.exports = function(app) {
             return res.status(500).json({ error: 'Erreur lors de la génération du token' });
         }
     });
+
+    // Route pour la documentation Swagger
+    app.use("/api/dev/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
+        explorer: true,
+        customCss: '.swagger-ui .topbar { display: none }',
+        customSiteTitle: "API Voitures - Documentation"
+    }));
 };
