@@ -11,11 +11,15 @@ const options = {
     },
     servers: [
       {
-        url: "http://localhost:3000", // adapte à ton port
+        url: "http://localhost:3000",
       },
     ],
   },
-  apis: ["./api/cars/v1/*.js"], // fichiers où tu décriras les endpoints
+  apis: [
+    "./api/auth/*.js",
+    "./api/cars/v1/*.js", 
+    "./api/cars/admin/*.js"
+  ],
 };
 
 const swaggerSpec = swaggerJsdoc(options);
