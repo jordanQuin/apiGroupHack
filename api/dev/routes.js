@@ -1,11 +1,16 @@
 const jwt = require('jsonwebtoken');
-const { swaggerUi, swaggerSpec } = require("../../config/swagger.js");
 
 module.exports = function(app) {
+    // Route de développement pour générer des tokens JWT
     app.get('/api/dev/token', (req, res) => {
-        const options = { expiresIn: '1h' };
+        const { userId = 1, role = 'user' } = req.query;
+        
         try {
-            const token = jwt.sign({ userId: 'mockedUserId' }, process.env.JWT_SECRET, options);
+            const token = jwt.sign(
+                { userId: parseInt(userId), role }, 
+                process.env.JWT_SECRET,
+                { expiresIn: '1h', algorithm: 'HS256' }
+            );
 
             const cookieOptions = {
                 httpOnly: true,
@@ -16,11 +21,14 @@ module.exports = function(app) {
             };
 
             res.cookie('jwtToken', token, cookieOptions);
-            return res.json({ message: "Jeton transmis" });
+            return res.json({ 
+                message: "Token JWT généré",
+                token: token,
+                decoded: { userId: parseInt(userId), role }
+            });
         } catch (err) {
             console.error('JWT generation failed:', err);
-            return res.status(500).json({ error: 'token generation failed' });
+            return res.status(500).json({ error: 'Erreur lors de la génération du token' });
         }
     });
-    app.use("/api/dev/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-}
+};

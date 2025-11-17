@@ -101,9 +101,6 @@ typings/
 # Yarn Integrity file
 .yarn-integrity
 
-# dotenv environment variables file
-.env
-
 
 ### SublimeText ###
 # cache files for sublime text
@@ -149,3 +146,5 @@ Session.vim
 .netrwhist
 # auto-generated tag files
 tags
+
+test_api.sh

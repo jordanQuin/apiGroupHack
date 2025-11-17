@@ -15,7 +15,7 @@ const options = {
       },
     ],
   },
-  apis: ["./api/books/v1/*.js", "./api/books/v2/*.js"], // fichiers où tu décriras les endpoints
+  apis: ["./api/cars/v1/*.js"], // fichiers où tu décriras les endpoints
 };
 
 const swaggerSpec = swaggerJsdoc(options);
